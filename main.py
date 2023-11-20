@@ -1,21 +1,10 @@
-import requests
+from YandexDirect import Direct
 
-def get_new_token(client_id: str, client_secret: str) -> str:
+with open(r'C:/Users/user/PycharmProjects/YandexAPI/token.txt') as f:
+    token = f.readline()
 
-    url = 'https://oauth.yandex.ru/token'
+with open(r'C:/Users/user/PycharmProjects/YandexAPI/login.txt') as f:
+    login = f.readline()
 
-    code = input(
-        f'Перейдите по ссылке https://oauth.yandex.ru/authorize?response_type=code&client_id={client_id} и '
-        'скопируйте code [(E)xit для выхода]: ')
-    if code in ('E', 'Exit'):
-        return ''
-
-    res = requests.post(url,
-                        data={'grant_type': 'authorization_code',
-                              'code': int(code),
-                              'client_id': client_id,
-                              'client_secret': client_secret},
-                        headers={'Content-type': 'application/x-www-form-urlencoded'})
-    token = res.json()['access_token']
-    return token
-
+direct = Direct(token, login)
+segments = direct.get_retargeting_lists(None)
